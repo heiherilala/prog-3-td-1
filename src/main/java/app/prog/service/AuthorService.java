@@ -1,10 +1,9 @@
 package app.prog.service;
 
-import app.prog.model.BookEntity;
-import app.prog.repository.BookRepository;
+import app.prog.model.AuthorEntity;
+import app.prog.repository.AuthorRepository;
 import lombok.AllArgsConstructor;
 import org.springframework.http.HttpStatus;
-import org.springframework.http.HttpStatusCode;
 import org.springframework.stereotype.Service;
 import org.springframework.web.server.ResponseStatusException;
 
@@ -13,24 +12,24 @@ import java.util.Optional;
 
 @Service
 @AllArgsConstructor
-public class BookService {
-    private final BookRepository repository;
+public class AuthorService {
+    private final AuthorRepository repository;
 
-    public List<BookEntity> getBooks() {
+    public List<AuthorEntity> getAuthors() {
         return repository.findAll();
     }
 
-    public List<BookEntity> createBooks(List<BookEntity> toCreate) {
+    public List<AuthorEntity> createAuthors(List<AuthorEntity> toCreate) {
         return repository.saveAll(toCreate);
     }
 
-    public List<BookEntity> updateBooks(List<BookEntity> toUpdate) {
+    public List<AuthorEntity> updateAuthors(List<AuthorEntity> toUpdate) {
         return repository.saveAll(toUpdate);
     }
 
     //TODO-3: should I use Integer here or int ? Why ?
     //=> int because the id can't be null
-    public BookEntity deleteBook(int BookEntityId) {
+    public AuthorEntity deleteAuthors(int AuthorEntityId) {
         /*
         TIPS: From the API, the Class Optional<T> is :
         A container object which may or may not contain a non-null value.
@@ -39,7 +38,7 @@ public class BookService {
 
         T is the type of the value, for example : here the class type is BookEntity
          */
-        Optional<BookEntity> optional = repository.findById(String.valueOf(BookEntityId));
+        Optional<AuthorEntity> optional = repository.findById(String.valueOf(AuthorEntityId));
         if (optional.isPresent()) {
             repository.delete(optional.get());
             return optional.get();
@@ -52,7 +51,7 @@ public class BookService {
         Link 1 : https://www.baeldung.com/spring-response-entity
         Link 2 : https://www.baeldung.com/exception-handling-for-rest-with-spring
          */
-            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Book Not Found" );
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Author Not Found" );
         }
     }
 }
