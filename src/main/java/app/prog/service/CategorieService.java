@@ -1,10 +1,9 @@
 package app.prog.service;
 
 
-
-import app.prog.model.AuthorEntity;
 import app.prog.exception.NotFoundException;
-import app.prog.repository.AuthorRepository;
+import app.prog.model.CategorieEntity;
+import app.prog.repository.CategorieRepository;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -13,23 +12,23 @@ import java.util.Optional;
 
 @Service
 @AllArgsConstructor
-public class AuthorService {
-    private final AuthorRepository repository;
+public class CategorieService {
+    private final CategorieRepository repository;
 
-    public List<AuthorEntity> getAuthors() {
+    public List<CategorieEntity> getCategories() {
         return repository.findAll();
     }
 
-    public List<AuthorEntity> createAuthors(List<AuthorEntity> toCreate) {
+    public List<CategorieEntity> createCategories(List<CategorieEntity> toCreate) {
         return repository.saveAll(toCreate);
     }
 
-    public List<AuthorEntity> updateAuthors(List<AuthorEntity> toUpdate) {
+    public List<CategorieEntity> updateCategories(List<CategorieEntity> toUpdate) {
         return repository.saveAll(toUpdate);
     }
 
-    public AuthorEntity deleteAuthor(int id) {
-        Optional<AuthorEntity> optional = repository.findById(id);
+    public CategorieEntity deleteCategorie(int id) {
+        Optional<CategorieEntity> optional = repository.findById(id);
         if (optional.isPresent()) {
             repository.delete(optional.get());
             return optional.get();
@@ -42,7 +41,7 @@ public class AuthorService {
         Link 1 : https://www.baeldung.com/spring-response-entity
         Link 2 : https://www.baeldung.com/exception-handling-for-rest-with-spring
          */
-            throw new NotFoundException("AuthorEntity." + id + " not found");
+            throw new NotFoundException("CategorieEntity. "+ " " + id + " not found");
         }
     }
 }

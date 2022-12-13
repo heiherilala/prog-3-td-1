@@ -1,9 +1,16 @@
 package app.prog.service;
 
+import app.prog.controller.mapper.BookRestMapper;
+import app.prog.controller.response.BookResponse;
 import app.prog.model.BookEntity;
+import app.prog.exception.NotFoundException;
 import app.prog.repository.BookRepository;
+import app.prog.repository.CategorieRepository;
 import lombok.AllArgsConstructor;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.HttpStatusCode;
 import org.springframework.stereotype.Service;
+import org.springframework.web.server.ResponseStatusException;
 
 import java.util.List;
 import java.util.Optional;
@@ -12,7 +19,7 @@ import java.util.Optional;
 @AllArgsConstructor
 public class BookService {
     private final BookRepository repository;
-
+    private final BookRestMapper mapper;
     public List<BookEntity> getBooks() {
         return repository.findAll();
     }
@@ -26,7 +33,7 @@ public class BookService {
     }
 
     //TODO-3: should I use Integer here or int ? Why ?
-    public BookEntity deleteBook(Integer id) {
+    public String deleteBook(Integer id) {
         /*
         TIPS: From the API, the Class Optional<T> is :
         A container object which may or may not contain a non-null value.
@@ -35,20 +42,16 @@ public class BookService {
 
         T is the type of the value, for example : here the class type is BookEntity
          */
-        Optional<BookEntity> optional = repository.findById(id);
-        if (optional.isPresent()) {
-            repository.delete(optional.get());
-            return optional.get();
-        } else {
+        BookEntity optional = repository.findById(id).orElseThrow(()-> {throw new NotFoundException("BookEntity." + id + " not found");});
+        BookResponse resp = mapper.toRest(optional);
+        repository.delete(optional);
+        BookEntity actualOpional = mapper.toDomain(resp);
+
+
+            return "delet id"+ id + "sucsesse";
+
         /*
         TODO-5 : The exception appears as an internal server error, status 500.
-        We all know that the appropriate error status is the 404 Not Found.
-        Any solution to do this ?
-        These links may help you :
-        Link 1 : https://www.baeldung.com/spring-response-entity
-        Link 2 : https://www.baeldung.com/exception-handling-for-rest-with-spring
-         */
-            throw new RuntimeException("BookEntity." + id + " not found");
-        }
+*/
     }
 }
